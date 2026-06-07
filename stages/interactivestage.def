@@ -10,7 +10,7 @@ displayName = "Interactive Training Stage"    ; Name to display on the select sc
 versionDate = 2026.01.22            ; Version / Date of stage.
 ikemenVersion = 1.0                 ; Version of Ikemen GO the stage is made for
 author = "Lasombra Demon, Phantom.of.the.Server"    ; Stage author name.
-AttachedChar = attachedchar\interactivestagechar.def
+AttachedChar = interactivestage\interactivestagechar.def
 ; ----------------------------------------------------------
 [Camera]
 ; Camera starting position: Usually 0 for both

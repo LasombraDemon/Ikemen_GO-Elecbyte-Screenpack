@@ -7,11 +7,12 @@ localcoord = 320,240
 ;https://github.com/RealFoobs/Attached-char-template/tree/main
 
 [Files]
-sprite = InteractiveStage.sff
-anim = InteractiveStage.air
-sound = InteractiveStage.snd;
-stcommon = common1.cns      ;Common states (from data/ or motif)
-st = InteractiveStage.zss;
+sprite = interactivestage.sff
+anim = interactivestage.air
+sound = interactivestage.snd
+stcommon = common1.cns
+st = interactivestage.zss
+
 ;=========================================================================================
 ;CMD section
 [Remap]
@@ -22,17 +23,22 @@ a = a
 b = b
 c = c
 s = s
+
+[Defaults]
 command.time = 15
 command.buffer.time = 1
+
 [Command]
-name = "FF"     ;Required (do not remove)
+name = "FF" ;Required (do not remove)
 command = F, F
 time = 10
+
 [Command]
-name = "BB"     ;Required (do not remove)
+name = "BB" ;Required (do not remove)
 command = B, B
 time = 10
+
 [Command]
-name = "recovery";Required (do not remove)
+name = "recovery" ;Required (do not remove)
 command = x+y
 time = 1

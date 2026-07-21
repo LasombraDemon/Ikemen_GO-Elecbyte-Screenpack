@@ -7,11 +7,15 @@ localcoord = 320,240
 ;https://github.com/RealFoobs/Attached-char-template/tree/main
 
 [Files]
-sprite = interactivestage.sff
-anim = interactivestage.air
-sound = interactivestage.snd
+sprite = interactivestageChar.sff
+anim = interactivestageChar.air
+sound = interactivestageChar.snd
 stcommon = common1.cns
-st = interactivestage.zss
+st = interactivestageChar.zss
+
+;Credits to Neat Unsou for these files
+[Shaders]
+wobble = wobble.frag
 
 ;=========================================================================================
 ;CMD section

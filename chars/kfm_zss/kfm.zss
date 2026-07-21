@@ -169,6 +169,24 @@ if animElemTime(7) = 3 {
 	call SysSnd(5, 3, 2);
 }
 
+# Basic ZSS Dialogue
+# This is a basic example demonstrating how some tokens are used to build a simple dialogue.
+# Note that you can define which portraits and animations to use directly in the [Dialogue Info] section in system.def.
+# For more info about the dialogue tokens, check the wiki:
+# https://github.com/ikemen-engine/Ikemen-GO/wiki/State-controllers-(new)#dialogue
+if enemy,name = "Kung Fu Man" { # Only triggers if the opponent's name matches this value
+	if teamSide = 1 { # Only if the calling character is on teamSide 1 (prevents duplicate dialogue in mirror matches)
+		dialogue{
+			# Line 1: Set P1 and P2 faces. P1 talks first
+			text1: "<p1><p1face = self, 9000, 1><p2face = self, 9000, 1><p1faceActive = self, 9003>Hey... You look just like me!<wait=90>";
+			# Line 2: P2 responds. We don't need to redefine the portraits unless we want them to change
+			text2: "<p2><p2faceActive = self, 9003>Of course I do... I'm Kung Fu Man too!<wait=90>";
+			# Line 3: P1 responds, pauses, then continues in a new line
+			text3: "<p1>This is confusing...<wait=60>\nI don't trust you.<wait=90>";
+		}
+	}
+}
+
 #Change to stand state when done
 if animTime = 0 {
 	changeState{value: 0}

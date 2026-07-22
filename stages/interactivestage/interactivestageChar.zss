@@ -58,7 +58,7 @@ if map(BrokenObject) = 0 && roundState > 1 {
 	# We'll run a loop to check if the player is airborne AND in a gethit state
 	# We iterate up until 8 because that's normally the maximum number of players in Ikemen GO
 	for i = 1; 8; 1 {
-		if playerNoExist($i)
+		if playerNoExist($i)	# This trigger is crucial in any code that loops through all players!
 		&& player($i), hitFall = 1
 		&& player($i), stateType = A
 		&& player($i), pos y != 0
@@ -107,7 +107,7 @@ if map(BrokenObject) = 0 && roundState > 1 {
 				# Let's throw some debris
 				for j = 1 ; randomRange(30, 40) {
 					explod{
-						ID: 600;
+						ID: 600 + NumExplod;
 						anim: 600 + randomRange(0, 5);
 						sprpriority: 9;
 						space: stage;
@@ -132,14 +132,14 @@ if map(BrokenObject) = 0 && roundState > 1 {
 
 # We don't want the debris going under the floor, but bouncing on it.
 if numExplod > 0 {
-	for t = 1; numExplod {
-		if abs(explodVar($t, 0, vel y)) > 2.5 {
-			modifyExplod{ID: $t; angle: explodVar($t, 0, angle) + (3*sign(603-explodVar($t, 0, anim)))}
+	for t = 1; numExplod-1 {
+		if abs(explodVar(600+$t, 0, vel y)) > 2.5 {
+			modifyExplod{ID: 600+$t; angle: explodVar(600+$t, 0,angle) + (3*sign(603-explodVar(600+$t, 0,anim)))}
 		}
 		
-		if explodVar($t, 0, pos y) + explodVar($t, 0, vel y) >= 0
-		&& explodVar($t, 0, vel y) > 0.2 {
-			modifyExplod{ID: $t; vel: explodVar($t, 0, vel x) * 0.8, explodVar($t, 0, vel y) * -0.5}
+		if explodVar(600+$t, 0,pos y) + explodVar(600+$t, 0,vel y) >= 0
+		&& explodVar(600+$t, 0,vel y) > 0.2 {
+			modifyExplod{ID: 600+$t; vel: explodVar(600+$t, 0,vel x) * 0.8, explodVar(600+$t, 0,vel y) * -0.5}
 		}
 	}
 }
@@ -172,12 +172,20 @@ if roundState = 0 && stageVar(StageInfo.ResetBG) = 1 {
 	}
 }
 
+if roundState = 0 && # If Fatality conditions *can* be met, and fatality wasn't performed,
+					 # make banners visible during this round
+	(player(1), decisiveRound || player(2), decisiveRound || player(1), teamMode = Turns || player(2), teamMode = Turns)
+	&& stageBGVar(50, 0, delta.x) != 17.10#This means the banner was not already changed
+{
+	modifyStageBG{ID: 50; trans:addalpha;alpha:256,0;delta.x:0.6;}
+	modifyStageBG{ID: 51; trans:addalpha;alpha:256,0;delta.x:0.6;}
+}
+		
 #==========================================================================================
 # Negative states
 #==========================================================================================
 [Statedef -4]
 # Attached chars will often use helpers to interact with Teams 1 and 2.
-
 if isHelper(1) {# let's run this only once
 
 	# This defines the stage color pulse.
@@ -247,11 +255,36 @@ if isHelper(1) {# let's run this only once
 		if playerID(map(PlayerNumberIsDead)), StateNo = 5100
 		&& playerID(map(PlayerNumberIsDead)), Time < 2 {
 			envShake{time: 30; freq: 90; ampl: 10; decay: 1}				
+			Map(JustDied):=1;
 		}
 
 		if roundState = 3 {
 			assertSpecial{flag: nobardisplay}
 		}
+	}
+	
+	if Map(JustDied) > 0 && Map(JustDied) < 9999 {Map(JustDied):=Map(JustDied)+1;}
+	
+	if Map(JustDied) > 50 && Map(JustDied) < 70
+	&& stageBGVar(50, 0, delta.x) != 17.10
+	{
+	   #The wobbling effect is done by stacking these shaded explods
+	   explod{
+		 ID:599;
+		 anim: 598;
+		 postype : left;
+		 pos:screenWidth/2,screenHeight/2;
+		 removetime: 40;
+		 scale :9999,9999;
+		 Shadow :0;
+		 ownpal :1;
+		 ontop :1;
+		 shader :"wobble";
+	     }
+		 
+	   #And this is another simple modifyStageBG idea to make a stage object invisible; just give it this trans
+	   #and add another parameter you can check via stageBGVar
+	   if Map(JustDied) = 60 {modifyStageBG{ID: 50; trans:addalpha;alpha:0,256;delta.x:17.10;}}
 	}
 }
 # End isHelper(1)

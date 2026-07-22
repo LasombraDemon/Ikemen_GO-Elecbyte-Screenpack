@@ -2,6 +2,9 @@
 [Begin Action 0]
 -1, 0, 0, 0, 1
 
+[Begin Action 598]
+600,0, 0,0, -1, , , 99,99
+
 [Begin Action 599]
 Clsn2: 1
   Clsn2[0] = -34, -192, 34, 0
